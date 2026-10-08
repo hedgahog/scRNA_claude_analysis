@@ -95,17 +95,17 @@ def analyze_scrna_with_claude(file_path: str):
     # Extract code block and save to a local file
     # This regex looks for text wrapped inside ```python ... ``` markdown blocks
     import re
-    code_block_match = re.search(r"```python\s*(.*?)\s*```", text_block.text, re.DOTALL)
+    code_block_match = re.search(r"```python\s*(.*?)\s*```", analysis_strategy, re.DOTALL)
 
     if code_block_match:
         generated_code = code_block_match.group(1)
     else:
         # Fallback if Claude omitted markdown blocks and just provided raw code
-        generated_code = text_block
+        generated_code = analysis_strategy
 
     output_filename = "cs223_llm_step1_scanpy_analysis.py"
     with open(output_filename, "w", encoding="utf-8") as f:
-        f.write(generated_code.text)
+        f.write(generated_code)
 
     print(f"🎉 Successfully created and wrote code to: {output_filename}")
 
