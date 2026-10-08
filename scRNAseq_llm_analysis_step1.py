@@ -40,10 +40,10 @@ def analyze_scrna_with_claude(file_path: str):
     prompt = f"""
     Act as an expert bioinformatician and Python developer specializing in single-cell RNA sequencing (scRNA-seq) analysis. 
 
-    Write a complete, production-ready Python script using the Scanpy library to perform a standard quality control (QC), filtering, normalization, dimensionality reduction, and clustering workflow on a single-cell dataset.
+    Execute a complete, production-ready Python script using the Scanpy library to perform a standard quality control (QC), filtering, normalization, dimensionality reduction, and clustering workflow on a single-cell dataset.
     
     Here are the requirements for the script:
-    1. Input: Read an existing input file named "pbmc_sample.h5ad".
+    1. Input: Read an existing input file at path "./data/pbmc_sample.h5ad".
     2. Quality Control & Filtering:
        - Calculate QC metrics (mitochondrial, ribosomal, and hemoglobin genes if applicable).
        - Filter out low-quality cells based on standard thresholds (e.g., min_genes=200, min_cells=3).
@@ -67,7 +67,9 @@ def analyze_scrna_with_claude(file_path: str):
     - Proper handling of the raw data layer (`adata.raw`) before scaling so downstream differential expression/marker gene analysis can use unscaled data.
     - Defensive checks (e.g., verifying if mitochondrial genes exist in the dataset using 'MT-' or 'mt-' prefixes).
     
-    Provide only the clean Python code block.
+    Provide:
+    1) The clean Python code block.
+    2) Save "processed_dataset.h5ad" into the subdirectory folder named '/outputs'.
     """
 
     print("--- Sending dataset context to Claude Sonnet 5 ---")

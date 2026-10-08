@@ -28,7 +28,7 @@ COPY --chown=app:app scRNAseq_llm_analysis_step1.py .
 USER app
 
 # Copy source code
-COPY . .
+# COPY . .
 
 # Define environment variable (optional)
 # ENV NAME World
