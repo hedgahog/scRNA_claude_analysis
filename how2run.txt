@@ -1,0 +1,15 @@
+export ANTHROPIC_API_KEY="sk-ant-..."
+
+sudo docker build -t inclass2 .
+docker run --rm \
+  -e ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}" \
+  -v "$(pwd)/data:/app/data:ro" \
+  -v "$(pwd)/generated:/app/generated" \
+  -v "$(pwd)/output:/app/output" \
+  -w /app/generated \
+  scrna-llm \
+  python /app/scRNAseq_llm_analysis_step1.py
+
+# -v mounts this dir at run time, not copied into image in build, read only
+
+export ANTHROPIC_API_KEY="sk-ant-..."

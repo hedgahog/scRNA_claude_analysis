@@ -1,2 +1,4 @@
 scanpy
 anthropic
+igraph
+leidenalg

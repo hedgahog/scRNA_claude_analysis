@@ -6,7 +6,7 @@ import scanpy as sc
 from anthropic import Anthropic
 
 # Initialize the Anthropic client using the environment variable 'ANTHROPIC_API_KEY'
-client = Anthropic(api_key="Put your Anthropic key here.")
+client = Anthropic()  # reads ANTHROPIC_API_KEY from the environment
 file_path = "./data/pbmc_sample.h5ad"   # Change to point to the desired .h5ad file
 
 # ANALYSIS FUNS
@@ -43,7 +43,7 @@ def analyze_scrna_with_claude(file_path: str):
     Write a complete, production-ready Python script using the Scanpy library to perform a standard quality control (QC), filtering, normalization, dimensionality reduction, and clustering workflow on a single-cell dataset.
     
     Here are the requirements for the script:
-    1. Input: Read an existing input file named "input_dataset.h5ad".
+    1. Input: Read an existing input file named "pbmc_sample.h5ad".
     2. Quality Control & Filtering:
        - Calculate QC metrics (mitochondrial, ribosomal, and hemoglobin genes if applicable).
        - Filter out low-quality cells based on standard thresholds (e.g., min_genes=200, min_cells=3).
