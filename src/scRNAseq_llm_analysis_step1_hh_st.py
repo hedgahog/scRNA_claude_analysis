@@ -6,8 +6,10 @@ import scanpy as sc
 from anthropic import Anthropic
 
 # Initialize the Anthropic client using the environment variable 'ANTHROPIC_API_KEY'
-client = Anthropic(api_key="Put your Anthropic key here.")
+client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 file_path = "./data/pbmc_sample.h5ad"   # Change to point to the desired .h5ad file
+output_dir = "./output"
+os.makedirs(output_dir, exist_ok=True)
 
 # ANALYSIS FUNS
 def analyze_scrna_with_claude(file_path: str):
