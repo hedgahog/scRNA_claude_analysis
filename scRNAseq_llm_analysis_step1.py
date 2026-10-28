@@ -6,6 +6,7 @@ import subprocess
 import sys
 import scanpy as sc
 from anthropic import Anthropic
+from anthropic.types.beta import BetaMessageParam, BetaToolParam, BetaToolResultBlockParam
 
 # Initialize the Anthropic client using the environment variable 'ANTHROPIC_API_KEY'
 client = Anthropic()  # reads ANTHROPIC_API_KEY from the environment
@@ -47,7 +48,7 @@ def execute_python_code(code: str, step: int) -> tuple[str, bool]:
         return f"Execution failed: {str(e)}", True
 
 
-tools = [
+tools: list[BetaToolParam] = [
     {
         "name": "execute_python",
         "description": (
@@ -170,8 +171,9 @@ def analyze_scrna_with_claude(file_path: str):
     print(f"--- Starting {MODEL} agent workflow ---")
 
     # 4. Run the agent loop: Claude asks to run code, we run it locally and send back the output
-    conversation_history = [{"role": "user", "content": prompt}]
+    conversation_history: list[BetaMessageParam] = [{"role": "user", "content": prompt}]
     step = 0
+    response = None
 
     for _ in range(MAX_AGENT_TURNS):
         response = client.beta.messages.create(
@@ -189,11 +191,11 @@ def analyze_scrna_with_claude(file_path: str):
             break
 
         # Run every tool call in this turn and return all results in a single user message
-        tool_results = []
+        tool_results: list[BetaToolResultBlockParam] = []
         for block in response.content:
             if block.type == "tool_use" and block.name == "execute_python":
                 step += 1
-                code_to_run = block.input["code"]
+                code_to_run = str(block.input["code"])
                 print(f"\n--- [Claude Execution Request: step {step}] ---\n{code_to_run}\n")
 
                 tool_output, is_error = execute_python_code(code_to_run, step)
@@ -208,7 +210,11 @@ def analyze_scrna_with_claude(file_path: str):
 
         conversation_history.append({"role": "user", "content": tool_results})
     else:
-        print(f"⚠️ Stopped after {MAX_AGENT_TURNS} turns without Claude finishing.")
+        print(f"⚠️\n"
+               f"Stopped after {MAX_AGENT_TURNS} turns without Claude finishing.")
+
+    if response is None:    # Only possible if MAX_AGENT_TURNS is 0
+        return
 
     if response.stop_reason == "refusal":
         print("⚠️ Claude declined the request.")

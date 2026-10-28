@@ -1,0 +1,9 @@
+$env:ANTHROPIC_API_KEY = "sk-ant-..."
+
+docker build -t inclass2 .
+docker run --rm `
+  -e ANTHROPIC_API_KEY=$env:ANTHROPIC_API_KEY `
+  -v "${PWD}/data:/app/data:ro" `
+  -v "${PWD}/output:/app/output" `
+  inclass2
+ 
