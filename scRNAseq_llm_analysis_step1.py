@@ -9,7 +9,7 @@ from anthropic import Anthropic
 from anthropic.types.beta import BetaMessageParam, BetaToolParam, BetaToolResultBlockParam
 
 # Initialize the Anthropic client using the environment variable 'ANTHROPIC_API_KEY'
-client = Anthropic()  # reads ANTHROPIC_API_KEY from the environment
+client = Anthropic(api_key="your api key here")  # reads ANTHROPIC_API_KEY from the environment
 file_path = "./data/pbmc_sample.h5ad"   # Change to point to the desired .h5ad file
 
 MODEL = "claude-sonnet-5-5"             # Official API identifier for Sonnet 5.5
